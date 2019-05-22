@@ -7,6 +7,7 @@
 
 </head>
 <body>
+    <%--fasfasfasfas--%>
     <jsp:forward page="${pageContext.request.contextPath}/indexload.do"></jsp:forward>
 </body>
 </html>
