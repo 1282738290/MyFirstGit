@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.gjm.dao.LoginMapper">
+
+	<select id="login" resultType="map">
+		SELECT * FROM employee e,details d WHERE e.details_id=d.details_id AND emp_user=#{username}
+	</select>
+
+	<!--加载，用户可以访问菜单-->
+	<select id="loadMenus" resultType="map">
+        SELECT * FROM sys_permission
+            WHERE TYPE='menu'
+                    AND id IN (
+                      SELECT permission_id FROM sys_role_permission WHERE role_id IN
+                        (SELECT role_id FROM sys_user_role WHERE user_id=#{userId}))
+    </select>
+
+	<select id="findRoleAndDep" resultType="map">
+		SELECT * FROM sys_role r,department d WHERE r.dep_id=d.dep_id AND id IN
+			(SELECT role_id FROM sys_user_role WHERE user_id=#{userId})
+	</select>
+
+	<select id="findSubMenus" resultType="map">
+		SELECT * FROM sys_permission WHERE TYPE='permission' AND  percode LIKE #{mm}
+	</select>
+
+	<!--加载权限-->
+	<select id="loadPermissions" resultType="String">
+        SELECT percode FROM sys_permission WHERE id IN
+              (SELECT permission_id FROM sys_role_permission WHERE role_id IN
+                  (SELECT role_id FROM sys_user_role WHERE user_id=#{userId}))
+    </select>
+
+	<update id="upd0">
+		 UPDATE employee SET state=0 WHERE emp_id=#{emp_id}
+	</update>
+
+	<update id="upd1">
+ 		 UPDATE employee SET state=1 WHERE emp_id=#{emp_id}
+	</update>
+
+	<select id="findCont" resultType="int">
+		SELECT COUNT(*) FROM employee WHERE state=1
+	</select>
+</mapper>

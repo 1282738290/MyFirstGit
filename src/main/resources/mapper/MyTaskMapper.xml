@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.gjm.dao.MyTaskMapper">
+
+    <insert id="addPreReq" parameterType="map">
+        INSERT pre_req VALUES(#{pre_id},#{themes},#{dep_name},#{posts},#{inv_number},#{emp_duty},#{pos_ask},#{pos_detail},#{remark},#{assges},#{createtime},#{processInstanceId},#{processDefinitionId})
+    </insert>
+
+    <select id="findAllPreReq" resultType="map">
+        select * from pre_req where processInstanceId=#{processInstanceId}
+    </select>
+
+    <delete id="deleteMyTask">
+        delete from pre_req where pre_id=#{pre_id}
+    </delete>
+
+    <select id="findPreReqByPre_id" resultType="map">
+        select * from pre_req where pre_id=#{pre_id}
+    </select>
+
+    <select id="findAll" resultType="map">
+        select * from pre_req
+    </select>
+
+    <select id="findAudit" resultType="map">
+        select * from pur_personnel_audit where pre_id=#{pre_id} ORDER BY audit_type,createtime
+    </select>
+
+    <update id="updateMyTask" parameterType="map">
+        update pre_req set themes=#{themes},posts=#{posts},inv_number=#{inv_number},emp_duty=#{emp_duty},pos_ask=#{pos_ask},pos_detail=#{pos_detail},remark=#{remark} where pre_id=#{pre_id}
+    </update>
+
+    <insert id="addMessages">
+        INSERT message_info VALUES(null,#{pre_id},1)
+    </insert>
+
+    <select id="findMessages" resultType="map">
+        select * from message_info where pre_id=#{pre_id}
+    </select>
+
+    <update id="updMessages">
+        update message_info set status=#{status} where pre_id=#{pre_id}
+    </update>
+
+    <update id="updateMessages">
+        update message_info set status=1 where pre_id=#{pre_id}
+    </update>
+
+
+
+
+</mapper>

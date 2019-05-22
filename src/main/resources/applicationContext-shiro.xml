@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+    <!--配置shiro的核心过滤器-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!--指定安全管理器-->
+        <property name="securityManager" ref="securityManager"/>
+        <!--指定如果用户没有认证，发出什么请求，去进行认证操作-->
+        <property name="loginUrl"  value="/login.do"/>
+        <!--指定哪些请求路径，需要shirio采用哪一种方式进行认证-->
+        <property name="filterChainDefinitions">
+            <value>
+                /css/**=anon
+                /images/**=anon
+                /js/**=anon
+                /themes/**=anon
+                /gjm/css/**=anon
+                /gjm/images/**=anon
+                /gjm/js/**=anon
+                /gjm/layui/**=anon
+                /logout.do=logout
+                /**=authc
+            </value>
+        </property>
+    </bean>
+
+    <!--安全管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--指定realm类-->
+        <property name="realm" ref="myRealm"/>
+    </bean>
+
+    <!--realm配置-->
+    <bean id="myRealm" class="org.java.realm.MyRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="3"/>
+    </bean>
+
+</beans>
